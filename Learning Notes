@@ -1,0 +1,75 @@
+> i want to try to run the test manually, after starting the server using "node index.js", can I access the API
+using browser? similar to how java apis are accessed , e.g.  http://localhost:80/get-system-info
+
+● No, you can't access this MCP server via a browser. MCP servers use stdio (standard input/output), not HTTP. They
+  communicate through JSON-RPC messages on stdin/stdout, not HTTP endpoints.
+
+  This is fundamentally different from REST APIs:
+  - REST API: HTTP server listening on a port (e.g., localhost:8080)
+  - MCP Server: Reads from stdin, writes to stdout
+
+  If you want to test manually, you need to pipe JSON messages to the running server:
+
+  # Start server and pipe a command to it:
+  echo '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"cl
+  ientInfo":{"name":"test","version":"1.0.0"}}}' | node index.js
+
+  But this only allows one request before the server exits.
+
+  If you want HTTP access, you'd need to create a different server using Express or similar. Would you like me to
+  create an HTTP wrapper around the MCP server so you can access it via browser at
+  http://localhost:3000/get-system-info?
+
+> what is the ideal way to run these servers in real world?
+
+● In the real world, MCP servers are designed to run as background processes managed by MCP clients like Claude
+  Desktop, not as standalone services.
+
+  Typical MCP Server Deployment
+
+  1. Claude Desktop Integration (most common)
+  - Add server to Claude Desktop's config file
+  - Claude Desktop automatically starts/stops the server when needed
+  - Server runs only when Claude is using it
+
+  Configuration example:
+  {
+    "mcpServers": {
+      "system-info": {
+        "command": "node",
+        "args": ["/path/to/system-info-server/index.js"]
+      }
+    }
+  }
+
+  2. Other MCP Clients
+  - IDEs with MCP support
+  - Custom applications using @modelcontextprotocol/sdk client
+  - CLI tools that need AI assistance with contextual tools
+
+  3. NPM Package Distribution
+  For easier installation:
+  npm install -g system-info-server
+  Then configure:
+  {
+    "mcpServers": {
+      "system-info": {
+        "command": "system-info-server"
+      }
+    }
+  }
+
+  Why stdio instead of HTTP?
+
+  - Security: No exposed ports, no network access
+  - Simplicity: Client manages lifecycle (start/stop)
+  - Local-first: MCP servers are meant for local tool execution
+  - Process isolation: Each client gets its own server instance
+
+  When you might want HTTP
+
+  If you need HTTP access for web apps or external tools, you'd build a separate HTTP API that either:
+  1. Calls MCP servers internally, or
+  2. Implements the same functionality directly as REST endpoints
+
+  The MCP protocol is specifically designed for AI assistants to access local tools securely.

@@ -1,0 +1,16 @@
+{
+  "name": "system-info-server",
+  "version": "1.0.0",
+  "description": "MCP server that provides system information",
+  "type": "module",
+  "main": "index.js",
+  "bin": {
+    "system-info-server": "./index.js"
+  },
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.19.1"
+  }
+}
