@@ -2,6 +2,7 @@
   "name": "mcp-learning",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -12,6 +13,7 @@
   "dependencies": {
     "@anthropic-ai/sdk": "^0.65.0",
     "@modelcontextprotocol/sdk": "^1.19.1",
+    "ollama": "^0.6.0",
     "openai": "^6.2.0"
   },
   "devDependencies": {

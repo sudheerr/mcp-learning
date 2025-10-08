@@ -1,6 +1,6 @@
 # MCP Learning Project
 
-A learning project demonstrating MCP (Model Context Protocol) integration with Claude AI.
+A learning project demonstrating MCP (Model Context Protocol) integration with multiple AI providers.
 
 ## Components
 
@@ -11,8 +11,20 @@ An MCP server that provides system information through a tool.
 - Returns CPU, memory, and OS details
 - Optional network interface information
 
-### 2. MCP Client (`mcp-client.js`)
-A client that connects Claude to the MCP server, enabling Claude to call tools.
+### 2. MCP Clients (Multiple Options!)
+
+**`mcp-client.js`** - Claude (Anthropic)
+- Cloud-based, high quality responses
+- Requires ANTHROPIC_API_KEY
+
+**`mcp-client-openai.js`** - ChatGPT (OpenAI)
+- Cloud-based, fast and affordable
+- Requires OPENAI_API_KEY
+
+**`mcp-client-ollama.js`** - Local LLM (Ollama)
+- 100% local and private
+- Free, works offline
+- Requires Ollama running locally
 
 ## Setup
 
@@ -21,23 +33,46 @@ A client that connects Claude to the MCP server, enabling Claude to call tools.
 npm install
 ```
 
-2. Set your Anthropic API key:
+2. Choose your AI provider and set up:
+
+**For Claude (Anthropic):**
 ```bash
 export ANTHROPIC_API_KEY='your-api-key-here'
 ```
 
+**For ChatGPT (OpenAI):**
+```bash
+export OPENAI_API_KEY='sk-your-api-key-here'
+```
+
+**For Local Ollama:**
+```bash
+# Install Ollama: https://ollama.com
+ollama serve                    # Start Ollama
+ollama pull llama3.2:3b         # Download a model
+```
+
 ## Usage
 
-### Running the MCP Client with Claude
-
+### Option 1: Claude (Cloud)
 ```bash
 node mcp-client.js
-```
-
-Or with a custom query:
-```bash
 node mcp-client.js "Tell me about my system's memory usage"
 ```
+
+### Option 2: ChatGPT (Cloud)
+```bash
+node mcp-client-openai.js
+node mcp-client-openai.js "What's my CPU model?"
+```
+
+### Option 3: Local Ollama (Free & Private)
+```bash
+node mcp-client-ollama.js
+node mcp-client-ollama.js "Use the get_system_info tool to check my RAM"
+```
+
+**Tip for Ollama:** Be explicit about using tools for best results!
 
 ### Testing the MCP Server Directly
 
